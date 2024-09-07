@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const http = require('http');
 const socket = require('socket.io');
+const router = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,8 +27,10 @@ app.use(cors({
 }));
 app.use(express.urlencoded({ extended: true }));
 
-// routers
 // use socket controller
+
+// routers
+app.use('/api/v1', router);
 
 app.get('/', (req, res) => {
     const ip_addr = req.headers['x-forwarded-for']  || req.socket.remoteAddress;

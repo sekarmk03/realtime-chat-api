@@ -11,7 +11,13 @@ module.exports = {
 
     addParticipants: async (chatId, userIds) => {
         const participants = await ChatParticipant.bulkCreate(
-            userIds.map(userId => ({ user_id: userId, chat_id: chatId }))
+            userIds.map(userId => (
+                {
+                    user_id: userId,
+                    chat_id: chatId,
+                    joined_at: new Date()
+                }
+            ))
         );
 
         return participants;

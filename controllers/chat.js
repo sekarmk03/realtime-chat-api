@@ -1,4 +1,4 @@
-const { chatSvc } = require('../services');
+const { chatSvc, messageSvc } = require('../services');
 const { sequelize } = require('../models');
 const err = require('../utils/errors');
 
@@ -66,6 +66,22 @@ module.exports = {
                 message: 'Successfully get chat',
                 data: chat
             });
+        } catch (error) {
+            console.log("ERROR: ", error);
+            next(error);
+        }
+    },
+
+    getMessages: async (req, res, next) => {
+        try {
+            const chatId = parseInt(req.params.id);
+            const messages = await messageSvc.getMessagesByChat(chatId);
+
+            return res.status(200).json({
+                status: 'OK',
+                message: 'Successfully get messages',
+                data: messages
+            })
         } catch (error) {
             console.log("ERROR: ", error);
             next(error);

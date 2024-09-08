@@ -7,7 +7,7 @@ module.exports = {
         let transaction;
         try {
             const { chat_id, content } = req.body;
-            const sender_id = req.user.id;
+            const sender_id = req.user.sub;
 
             transaction = await sequelize.transaction();
     

@@ -1,4 +1,5 @@
 const { sequelize, Chat, ChatParticipant, User } = require('../models');
+const { Op } = require('sequelize');
 
 module.exports = {
     createChat: async (type, userIds) => {
@@ -29,17 +30,31 @@ module.exports = {
                 {
                     model: ChatParticipant,
                     as: 'participants',
-                    where: { user_id: userId },
-                    include: {
-                        model: User,
-                        as: 'users',
-                        attributes: ['id', 'name']
-                    }
+                    attributes: ['user_id'],
+                    where: { user_id: userId }
                 }
             ]
         });
 
         return chats;
+    },
+
+    getOtherChatParticipants: async (chatId, userId) => {
+        const participants = await ChatParticipant.findAll({
+            where: {
+                chat_id: chatId,
+                user_id: {
+                    [Op.ne]: userId
+                },
+            },
+            include: {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'name']
+            }
+        });
+
+        return participants;
     },
 
     getChatById: async (chatId, userId) => {

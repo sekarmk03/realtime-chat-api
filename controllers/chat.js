@@ -1,6 +1,7 @@
 const { chatSvc, messageSvc } = require('../services');
 const { sequelize } = require('../models');
 const err = require('../utils/errors');
+const { chat: chatTransform } = require('../utils/response_transformer');
 
 module.exports = {
     create: async (req, res, next) => {
@@ -39,7 +40,18 @@ module.exports = {
 
     getChats: async (req, res, next) => {
         try {
-            const chats = await chatSvc.getChatsByUserId(req.user.id);
+            const userId = req.user.sub;
+            let chats = await chatSvc.getChatsByUserId(userId);
+
+            chats = await Promise.all(chats.map(async chat => {
+                const receivers = await chatSvc.getOtherChatParticipants(chat.id, userId);
+                return {
+                    ...chat.dataValues,
+                    receivers
+                };
+            }));
+
+            chats = chatTransform.chatList(chats);
 
             return res.status(200).json({
                 status: 'OK',

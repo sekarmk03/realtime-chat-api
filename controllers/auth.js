@@ -17,7 +17,7 @@ module.exports = {
 
             const { name, email, password } = body;
 
-            const existUser = await userSvc.getUserById(email);
+            const existUser = await userSvc.getUserByEmail(email);
             if (existUser) return err.conflict(res, 'Email already registered');
 
             transaction = await sequelize.transaction();

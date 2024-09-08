@@ -19,6 +19,13 @@ module.exports = {
         created_at: new Date("2024-09-07T13:50:04.000Z"),
         updated_at: new Date("2024-09-07T13:50:04.000Z")
       },
+      {
+        name: 'Joe Hahn',
+        email: 'joe@example.com',
+        password: await bcrypt.hash('joe123', 10),
+        created_at: new Date("2024-09-08T20:50:04.000Z"),
+        updated_at: new Date("2024-09-08T20:50:04.000Z")
+      }
     ], {});
   },
 

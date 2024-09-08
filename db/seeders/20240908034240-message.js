@@ -102,13 +102,6 @@ module.exports = {
         created_at: new Date("2024-09-07T07:29:10.000Z"),
         updated_at: new Date("2024-09-07T07:29:10.000Z")
       },
-      {
-        chat_id: 2,
-        sender_id: 3,
-        content: "Sounds like a plan!",
-        created_at: new Date("2024-09-07T07:30:30.000Z"),
-        updated_at: new Date("2024-09-07T07:30:30.000Z")
-      }
     ], {});
   },
 

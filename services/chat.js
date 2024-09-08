@@ -31,7 +31,12 @@ module.exports = {
                     model: ChatParticipant,
                     as: 'participants',
                     attributes: ['user_id'],
-                    where: { user_id: userId }
+                    where: { user_id: userId },
+                    include: {
+                        model: User,
+                        as: 'user',
+                        attributes: ['id', 'name']
+                    }
                 }
             ]
         });

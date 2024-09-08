@@ -45,9 +45,11 @@ module.exports = {
 
             chats = await Promise.all(chats.map(async chat => {
                 const receivers = await chatSvc.getOtherChatParticipants(chat.id, userId);
+                const latestMessage = await messageSvc.getLatestMessage(chat.id);
                 return {
                     ...chat.dataValues,
-                    receivers
+                    receivers,
+                    latestMessage
                 };
             }));
 

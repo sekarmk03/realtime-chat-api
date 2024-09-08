@@ -18,5 +18,20 @@ module.exports = {
         });
 
         return message;
+    },
+
+    getLatestMessage: async (chatId) => {
+        const message = await Message.findOne({
+            where: { chat_id: chatId },
+            order: [['created_at', 'desc']],
+            limit: 1,
+            include: {
+                model: User,
+                as: 'sender',
+                attributes: ['id', 'name']
+            }
+        });
+
+        return message;
     }
 }

@@ -1,0 +1,29 @@
+name: Deploy to Railway Prod Environment
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install packages
+        run: npm install
+
+      - name: Install Railway
+        run: npm i -g @railway/cli
+
+      - name: Deploy
+        run: railway up --service e31fd98f-70c6-4cc7-9c3f-4be69a330e6b
+        env:
+          RAILWAY_TOKEN: ${{secrets.RAILWAY_PROD_TOKEN}}

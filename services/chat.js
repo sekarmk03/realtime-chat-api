@@ -1,11 +1,11 @@
-const { sequelize, Chat, ChatParticipant, User, Message } = require('../models');
+const { sequelize, Chat, ChatParticipant, User } = require('../models');
 const { Op } = require('sequelize');
 
 module.exports = {
-    createChat: async (type, userIds) => {
-        const chat = await Chat.create({ type });
+    createChat: async (name, type, userIds) => {
+        const chat = await Chat.create({ name, type });
 
-        await this.addParticipants(chat.id, userIds);
+        await module.exports.addParticipants(chat.id, userIds);
 
         return chat;
     },

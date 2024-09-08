@@ -1,3 +1,5 @@
+const messageTransform = require('./message');
+
 module.exports = {
     chatList: (chats) => {
         if (chats.length == 0 || !chats) return [];
@@ -18,15 +20,7 @@ module.exports = {
                         role: receiver.role
                     }
                 }),
-                latestMessage: {
-                    id: chat.latestMessage.id,
-                    content: chat.latestMessage.content,
-                    sender: {
-                        id: chat.latestMessage.sender.id,
-                        name: chat.latestMessage.sender.name
-                    },
-                    created_at: chat.latestMessage.createdAt
-                },
+                latestMessage: messageTransform.messageDetail(chat.latestMessage),
                 created_at: chat.createdAt,
             }
 
@@ -51,17 +45,7 @@ module.exports = {
                     role: receiver.role
                 }
             }),
-            messages: chat.messages.map(message => {
-                return {
-                    id: message.id,
-                    content: message.content,
-                    sender: {
-                        id: message.sender.id,
-                        name: message.sender.name
-                    },
-                    created_at: message.createdAt
-                }
-            }),
+            messages: messageTransform.messageList(chat.messages),
             created_at: chat.createdAt,
         }
 

@@ -1,17 +1,18 @@
 const { chatSvc, messageSvc } = require('../services');
 const { sequelize } = require('../models');
 const err = require('../utils/errors');
-const { chat: chatTransform } = require('../utils/response_transformer');
+const { chat: chatTransform, message: messageTransform } = require('../utils/response_transformer');
 
 module.exports = {
     create: async (req, res, next) => {
         let transaction;
         try {
-            const { type, recipientId } = req.body;
+            const { name, type, recipient_id } = req.body;
 
             transaction = await sequelize.transaction();
 
-            let userIds = [req.user.id, recipientId];
+            const userId = req.user.sub;
+            let userIds = [userId, recipient_id];
 
             let chat = await chatSvc.getChatByMembers(userIds);
             if (chat.length > 0) {
@@ -22,7 +23,7 @@ module.exports = {
                 });
             }
 
-            chat = await chatSvc.createChat(type, userIds);
+            chat = await chatSvc.createChat(name, type, userIds);
 
             await transaction.commit();
 
@@ -100,7 +101,9 @@ module.exports = {
     getMessages: async (req, res, next) => {
         try {
             const chatId = parseInt(req.params.id);
-            const messages = await messageSvc.getMessagesByChat(chatId);
+            let messages = await messageSvc.getMessagesByChat(chatId);
+
+            messages = messageTransform.messageList(messages);
 
             return res.status(200).json({
                 status: 'OK',

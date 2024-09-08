@@ -1,5 +1,6 @@
 const { messageSvc } = require('../services');
 const { sequelize } = require('../models');
+const { message: messageTransform } = require('../utils/response_transformer');
 
 module.exports = {
     create: async (req, res, next) => {
@@ -10,7 +11,9 @@ module.exports = {
 
             transaction = await sequelize.transaction();
     
-            const message = await messageSvc.createMessage(chat_id, sender_id, content);
+            let message = await messageSvc.createMessage(chat_id, sender_id, content);
+
+            message = messageTransform.messageDetail(message);
     
             await transaction.commit();
 

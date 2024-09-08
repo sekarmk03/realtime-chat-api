@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "sq:migrate": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all && sequelize db:migrate",
+    "sq:seed": "sequelize db:seed:undo:all && sequelize db:seed:all",
+    "sq:migrate:refresh": "sequelize db:seed:undo:all && sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
     "type": "git",

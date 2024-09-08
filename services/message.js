@@ -5,6 +5,11 @@ module.exports = {
         const messages = await Message.findAll({
             where: { chat_id: chatId },
             order: [['created_at', 'asc']],
+            include: {
+                model: User,
+                as: 'sender',
+                attributes: ['id', 'name']
+            }
         });
 
         return messages;

@@ -1,4 +1,4 @@
-const { sequelize, Chat, ChatParticipant, User } = require('../models');
+const { sequelize, Chat, ChatParticipant, User, Message } = require('../models');
 const { Op } = require('sequelize');
 
 module.exports = {
@@ -63,20 +63,20 @@ module.exports = {
     },
 
     getChatById: async (chatId, userId) => {
-        const chat = await Chat.findOne({
+        let chat = await Chat.findOne({
             where: { id: chatId },
             include: [
                 {
                     model: ChatParticipant,
                     as: 'participants',
+                    attributes: ['user_id'],
                     where: { user_id: userId },
                     include: {
                         model: User,
-                        as: 'users',
+                        as: 'user',
                         attributes: ['id', 'name']
                     }
                 },
-                // messages
             ]
         });
 

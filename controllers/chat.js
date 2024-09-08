@@ -69,11 +69,22 @@ module.exports = {
     getChat: async (req, res, next) => {
         try {
             const chatId = parseInt(req.params.id);
-            const userId = parseInt(req.user.id);
+            const userId = req.user.sub;
 
-            const chat = await chatSvc.getChatById(chatId, userId);
+            let chat = await chatSvc.getChatById(chatId, userId);
 
             if (!chat) return err.not_found(res, 'Chat not found');
+
+            const receivers = await chatSvc.getOtherChatParticipants(chat.id, userId);
+            const messages = await messageSvc.getMessagesByChat(chat.id);
+
+            chat = {
+                ...chat.dataValues,
+                receivers,
+                messages
+            };
+            
+            chat = chatTransform.chatDetail(chat);
 
             return res.status(200).json({
                 status: 'OK',

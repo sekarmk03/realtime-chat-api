@@ -38,5 +38,17 @@ module.exports = {
         });
 
         return message;
+    },
+
+    getMessageById: async (messageId) => {
+        const message = await Message.findByPk(messageId, {
+            include: {
+                model: User,
+                as: 'sender',
+                attributes: ['id', 'name']
+            }
+        });
+
+        return message;
     }
 }

@@ -13,6 +13,8 @@ module.exports = {
     
             let message = await messageSvc.createMessage(chat_id, sender_id, content);
 
+            message = await messageSvc.getMessageById(message.id);
+
             message = messageTransform.messageDetail(message);
     
             await transaction.commit();

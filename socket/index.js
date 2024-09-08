@@ -1,4 +1,4 @@
-const onlineUsers = {}; // To keep track of online users
+let onlineUsers = []; // To keep track of online users
 
 module.exports = (io) => {
     io.on('connection', (socket) => {
@@ -13,14 +13,10 @@ module.exports = (io) => {
 
             io.emit('onlineUsers', onlineUsers);
         });
-        // socket.emit('addNewUser', 1);
-        // socket.on('onlineUsers', (userData) => {
-        //     console.log(`${userData.user_id} is now online`);
-        // });
         
         // listen for new chat creation
         socket.on('createChat', (chat, recipientId) => {
-            const user = onlineUsers.find((user) => user.user_id == recipientId);
+            let user = onlineUsers.find((user) => user.user_id == recipientId);
 
             if (user) {
                 io.to(user.socket_id).emit('getChat', chat);
@@ -28,7 +24,7 @@ module.exports = (io) => {
         });
 
         socket.on('sendMessage', (message, recipientId) => {
-            const user = onlineUsers.find((user) => user.user_id == recipientId);
+            let user = onlineUsers.find((user) => user.user_id == recipientId);
 
             if (user) {
                 io.to(user.socket_id).emit('getMessage', message);

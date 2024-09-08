@@ -2,8 +2,6 @@ let onlineUsers = []; // To keep track of online users
 
 module.exports = (io) => {
     io.on('connection', (socket) => {
-        console.log(`New user connected: ${socket.id}`);
-
         socket.on('addNewUser', (userId) => {
             !onlineUsers.some((user) => user.user_id == userId) &&
             onlineUsers.push({

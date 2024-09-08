@@ -1,0 +1,53 @@
+const onlineUsers = {}; // To keep track of online users
+
+module.exports = (io) => {
+    io.on('connection', (socket) => {
+        console.log(`New user connected: ${socket.id}`);
+
+        socket.on('addNewUser', (userId) => {
+            !onlineUsers.some((user) => user.user_id == userId) &&
+            onlineUsers.push({
+                user_id: userId,
+                socket_id: socket.id,
+            });
+
+            io.emit('onlineUsers', onlineUsers);
+        });
+        // socket.emit('addNewUser', 1);
+        // socket.on('onlineUsers', (userData) => {
+        //     console.log(`${userData.user_id} is now online`);
+        // });
+        
+        // listen for new chat creation
+        socket.on('createChat', (chat, recipientId) => {
+            const user = onlineUsers.find((user) => user.user_id == recipientId);
+
+            if (user) {
+                io.to(user.socket_id).emit('getChat', chat);
+            }
+        });
+
+        socket.on('sendMessage', (message, recipientId) => {
+            const user = onlineUsers.find((user) => user.user_id == recipientId);
+
+            if (user) {
+                io.to(user.socket_id).emit('getMessage', message);
+            }
+        });
+
+        socket.on("disconnect", () => {
+            onlineUsers = onlineUsers.filter(
+                (user) => user.socket_id != socket.id
+            );
+
+            io.emit("onlineUsers", onlineUsers);
+        });
+
+        // // Listen for user typing activity
+        // socket.on('typing', (typingData) => {
+        //     console.log(`${typingData.user} is typing...`);
+        //     // Notify other users in the chat
+        //     socket.broadcast.emit('userTyping', typingData);
+        // });
+    });
+}

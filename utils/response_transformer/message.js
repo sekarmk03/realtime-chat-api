@@ -4,6 +4,7 @@ module.exports = {
         return messages.map((message) => {
             let newMessage = {
                 id: message.id,
+                chat_id: message.chat_id,
                 content: message.content,
                 sender: {
                     id: message.sender.id,
@@ -19,6 +20,7 @@ module.exports = {
     messageDetail: (message) => {
         let newMessage = {
             id: message.id,
+            chat_id: message.chat_id,
             content: message.content,
             sender: {
                 id: message.sender.id,

@@ -24,6 +24,16 @@ module.exports = {
             }
 
             chat = await chatSvc.createChat(name, type, userIds);
+            const receivers = await chatSvc.getOtherChatParticipants(chat.id, userId);
+            const latestMessage = await messageSvc.getLatestMessage(chat.id);
+
+            chat = {
+                ...chat.dataValues,
+                receivers,
+                latestMessage
+            };
+
+            chat = chatTransform.chatListDetail(chat);
 
             await transaction.commit();
 

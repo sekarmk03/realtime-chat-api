@@ -50,5 +50,29 @@ module.exports = {
         }
 
         return newchat;
+    },
+
+    chatListDetail: (chat) => {
+        let newchat = {
+            id: chat.id,
+            name: chat.name,
+            type: chat.type,
+            me: {
+                id: chat.participants[0].user.id,
+                name: chat.participants[0].user.name,
+            },
+            partner: chat.receivers.map(receiver => {
+                return {
+                    id: receiver.user.id,
+                    name: receiver.user.name,
+                    joined_at: receiver.joined_at,
+                    role: receiver.role
+                }
+            }),
+            latestMessage: messageTransform.messageDetail(chat.latestMessage),
+            created_at: chat.createdAt,
+        }
+
+        return newchat;
     }
 }

@@ -14,13 +14,13 @@ module.exports = {
                 },
                 partner: chat.receivers.map(receiver => {
                     return {
-                        id: receiver.user.id,
-                        name: receiver.user.name,
-                        joined_at: receiver.joined_at,
-                        role: receiver.role
+                        id: receiver.user?.id ?? null,
+                        name: receiver.user?.name ?? "",
+                        joined_at: receiver?.joined_at ?? "",
+                        role: receiver?.role ?? ""
                     }
                 }),
-                latestMessage: messageTransform.messageDetail(chat.latestMessage),
+                latestMessage: (chat.latestMessage.length > 0) ? messageTransform.messageDetail(chat.latestMessage) : [],
                 created_at: chat.createdAt,
             }
 
@@ -69,7 +69,7 @@ module.exports = {
                     role: receiver.role
                 }
             }),
-            latestMessage: messageTransform.messageDetail(chat.latestMessage),
+            latestMessage: chat.latestMessage.length > 0 ? messageTransform.messageDetail(chat.latestMessage) : [],
             created_at: chat.createdAt,
         }
 

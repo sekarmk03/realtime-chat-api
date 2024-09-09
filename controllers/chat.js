@@ -6,6 +6,7 @@ const { chat: chatTransform, message: messageTransform } = require('../utils/res
 module.exports = {
     create: async (req, res, next) => {
         let transaction;
+        let flag = 0;
         try {
             const { name, type, recipient_id } = req.body;
 
@@ -24,18 +25,22 @@ module.exports = {
             }
 
             chat = await chatSvc.createChat(name, type, userIds);
+            
+            await transaction.commit();
+            flag = 1;
+
+            chat = await chatSvc.getChatById(chat.id, userId);
             const receivers = await chatSvc.getOtherChatParticipants(chat.id, userId);
             const latestMessage = await messageSvc.getLatestMessage(chat.id);
-
+            
             chat = {
                 ...chat.dataValues,
                 receivers,
-                latestMessage
+                latestMessage: latestMessage ?? []
             };
-
+            
             chat = chatTransform.chatListDetail(chat);
-
-            await transaction.commit();
+            
 
             return res.status(201).json({
                 status: 'CREATED',
@@ -44,7 +49,7 @@ module.exports = {
             });
         } catch (error) {
             console.log("ERROR: ", error);
-            if (transaction) await transaction.rollback();
+            if (transaction && flag != 1) await transaction.rollback();
             next(error);
         }
     },
@@ -60,7 +65,7 @@ module.exports = {
                 return {
                     ...chat.dataValues,
                     receivers,
-                    latestMessage
+                    latestMessage: latestMessage ?? []
                 };
             }));
 

@@ -11,11 +11,13 @@ module.exports = {
     },
 
     addParticipants: async (chatId, userIds) => {
+        const role = "member";
         const participants = await ChatParticipant.bulkCreate(
             userIds.map(userId => (
                 {
                     user_id: userId,
                     chat_id: chatId,
+                    role: role,
                     joined_at: new Date()
                 }
             ))

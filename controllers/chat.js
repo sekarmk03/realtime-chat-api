@@ -36,7 +36,7 @@ module.exports = {
             chat = {
                 ...chat.dataValues,
                 receivers,
-                latestMessage: latestMessage ?? []
+                latestMessage: latestMessage ?? null
             };
             
             chat = chatTransform.chatListDetail(chat);
@@ -65,7 +65,7 @@ module.exports = {
                 return {
                     ...chat.dataValues,
                     receivers,
-                    latestMessage: latestMessage ?? []
+                    latestMessage: latestMessage ?? null
                 };
             }));
 

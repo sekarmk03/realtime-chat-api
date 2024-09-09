@@ -40,7 +40,6 @@ module.exports = {
             };
             
             chat = chatTransform.chatListDetail(chat);
-            
 
             return res.status(201).json({
                 status: 'CREATED',

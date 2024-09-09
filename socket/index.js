@@ -29,6 +29,15 @@ module.exports = (io) => {
             }
         });
 
+        socket.on('activity', (activity, userId, recipientId) => {
+            let recipient = onlineUsers.find((user) => user.user_id == recipientId);
+            let sender = onlineUsers.find((user) => user.user_id == userId);
+
+            if (sender) {
+                io.to(user.socket_id)
+            }
+        });
+
         socket.on("disconnect", () => {
             onlineUsers = onlineUsers.filter(
                 (user) => user.socket_id != socket.id

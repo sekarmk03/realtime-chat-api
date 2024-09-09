@@ -20,7 +20,7 @@ module.exports = {
                         role: receiver?.role ?? ""
                     }
                 }),
-                latestMessage: chat.latestMessage ?? messageTransform.messageDetail(chat.latestMessage),
+                latestMessage: chat.latestMessage != null ? messageTransform.messageDetail(chat.latestMessage) : null,
                 created_at: chat.createdAt,
             }
 
@@ -69,7 +69,7 @@ module.exports = {
                     role: receiver.role
                 }
             }),
-            latestMessage: chat.latestMessage ?? messageTransform.messageDetail(chat.latestMessage),
+            latestMessage: chat.latestMessage != null ? messageTransform.messageDetail(chat.latestMessage) : null,
             created_at: chat.createdAt,
         }
 
